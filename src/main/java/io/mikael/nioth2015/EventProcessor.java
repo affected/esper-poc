@@ -35,8 +35,7 @@ public class EventProcessor {
             public void update(final EventBean[] newEvents, final EventBean[] oldEvents, final EPStatement statement, final EPServiceProvider epServiceProvider) {
                 EventBean event = newEvents[0];
                 final Double newAvg = (Double) event.get("avg(value)");
-                System.out.println("avg=" + newAvg + " " + newAvg.getClass());
-                LOG.debug("avg=" + newAvg + " " + newAvg.getClass());
+                LOG.info("avg=" + newAvg + " " + newAvg.getClass());
                 avg = newAvg;
             }
         });
@@ -53,7 +52,8 @@ public class EventProcessor {
     }
 
     public void submitEvent(final TemperatureEvent event) {
-        esperProvider.getEPRuntime().sendEvent(new CurrentTimeEvent(event.getTimeCreated().toInstant().toEpochMilli()));
+        esperProvider.getEPRuntime().sendEvent(
+                new CurrentTimeEvent(event.getTimeCreated().toInstant().toEpochMilli()));
         esperProvider.getEPRuntime().sendEvent(event);
     }
 
