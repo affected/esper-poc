@@ -46,10 +46,10 @@ public class EventStreamConnection implements CommandLineRunner {
     @Value("${xenqtt.subscriptions.QoS}")
     private String qos;
 
-    @Value("${xenqtt.connection.username")
+    @Value("${xenqtt.connection.username}")
     private String username;
 
-    @Value("${xenqtt.connection.password")
+    @Value("${xenqtt.connection.password}")
     private String password;
 
     @Autowired
@@ -57,15 +57,13 @@ public class EventStreamConnection implements CommandLineRunner {
 
     @Override
     public void run(String... arg0) throws Exception {
-
         LOG.info("connecting to " + url);
-
-        // Build your client. This client is an asynchronous one so all interaction with the broker will be non-blocking.
-        AsyncMqttClient client = new AsyncMqttClient(url + ":" + port, new Subscriber(connectLatch, connectReturnCode, processor), 5);
+        final AsyncMqttClient client = new AsyncMqttClient(url + ":" + port, new Subscriber(connectLatch, connectReturnCode, processor), 5);
         try {
-            // Connect to the broker with a specific client ID. Only if the broker accepted the connection shall we proceed.
             LOG.info("clientId: " + clientId);
             LOG.info("cleanSession: " + cleanSession);
+            LOG.info("username: " + username);
+            LOG.info("password: " + password);
 
             client.connect(clientId, cleanSession, username, password);
 

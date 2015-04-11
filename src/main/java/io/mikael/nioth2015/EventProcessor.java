@@ -75,17 +75,22 @@ public class EventProcessor {
     }
 
     public List<SensorAnalysis> readLists() {
+
         final SensorAnalysis sa1 = new SensorAnalysis();
         sa1.id = "100";
         sa1.apartmentName = "A1";
-        sa1.insideTemperature = latest.get("100");
-        sa1.insideTemperatureMin = min.get("100");
-        sa1.insideTemperatureMax = max.get("100");
-        sa1.insideTemperatureAvg = avg.get("100");
-        sa1.radiatorTemperature = latest.get("101");
-        sa1.radiatorTemperatureMin = min.get("101");
-        sa1.radiatorTemperatureMax = max.get("101");
-        sa1.radiatorTemperatureAvg = avg.get("101");
+        try {
+            sa1.insideTemperature = latest.get("100");
+            sa1.insideTemperatureMin = min.get("100");
+            sa1.insideTemperatureMax = max.get("100");
+            sa1.insideTemperatureAvg = avg.get("100");
+            sa1.radiatorTemperature = latest.get("101");
+            sa1.radiatorTemperatureMin = min.get("101");
+            sa1.radiatorTemperatureMax = max.get("101");
+            sa1.radiatorTemperatureAvg = avg.get("101");
+        } catch (final NullPointerException ignore) {
+            // ignore
+        }
         sa1.emoticon = 0;
         sa1.alert = "Open Window";
 

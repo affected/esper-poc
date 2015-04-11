@@ -16,6 +16,19 @@ xenqtt.subscriptions.list: test
 xenqtt.subscriptions.QoS: 2
 
 ---
+spring.profiles: bluemix
+
+xenqtt.connection.username: "use-token-auth"
+xenqtt.connection.password: "7x2sg-Jiqsb@joU0L0"
+xenqtt.connection.url: "tcp://nfnzth.messaging.internetofthings.ibmcloud.com"
+xenqtt.connection.port: 1883
+xenqtt.connection.clientId: "d:nfnzth:analytics:ubuntu"
+xenqtt.connection.cleanSession: false
+
+xenqtt.subscriptions.list: "iot-2/evt/temperature/fmt/json"
+xenqtt.subscriptions.QoS: 2
+
+---
 spring.profiles: test
 
 server:
