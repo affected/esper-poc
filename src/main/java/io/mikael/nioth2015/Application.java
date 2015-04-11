@@ -1,6 +1,6 @@
 package io.mikael.nioth2015;
 
-import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
 import io.mikael.nioth2015.model.SensorAnalysis;
 import io.mikael.nioth2015.model.TemperatureEvent;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +15,7 @@ import javax.servlet.*;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 @SpringBootApplication
 @RestController
@@ -38,8 +39,10 @@ public class Application {
     }
 
     @RequestMapping(value="/analysis/", method=RequestMethod.GET)
-    public ResponseEntity<String> showAnalysis() {
-        return new ResponseEntity<>(Double.toString(eventProcessor.avg), HttpStatus.OK);
+    public ResponseEntity<Map> showAnalysis() {
+        return new ResponseEntity<>(
+                ImmutableMap.of("min", eventProcessor.minMap, "max", eventProcessor.maxMap, "avg", eventProcessor.avgMap),
+                HttpStatus.OK);
     }
 
     @RequestMapping(value="/lists/", method=RequestMethod.GET)

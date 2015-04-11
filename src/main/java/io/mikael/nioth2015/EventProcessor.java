@@ -14,6 +14,8 @@ import org.springframework.stereotype.Component;
 import javax.annotation.PostConstruct;
 import java.io.IOException;
 import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 @Component
 public class EventProcessor {
@@ -22,7 +24,11 @@ public class EventProcessor {
 
     private EPServiceProvider esperProvider;
 
-    public volatile double avg = 0D;
+    final ConcurrentMap<String, Double> minMap = new ConcurrentHashMap<>();
+
+    final ConcurrentMap<String, Double> maxMap = new ConcurrentHashMap<>();
+
+    final ConcurrentMap<String, Double> avgMap = new ConcurrentHashMap<>();
 
     @PostConstruct
     public void postConstruct() {
@@ -31,15 +37,20 @@ public class EventProcessor {
         config.addEventType(TemperatureEvent.class);
         esperProvider = EPServiceProviderManager.getDefaultProvider(config);
 
-        final String expression = "select avg(value) from io.mikael.nioth2015.model.TemperatureEvent.win:time(30 sec)";
+        final String expression = "select min(value), max(value), avg(value), sensorId " +
+                " from io.mikael.nioth2015.model.TemperatureEvent.win:time(30 sec) " +
+                " GROUP BY sensorId ";
+
         final EPStatement statement = esperProvider.getEPAdministrator().createEPL(expression);
         statement.addListener(new StatementAwareUpdateListener() {
             @Override
             public void update(final EventBean[] newEvents, final EventBean[] oldEvents, final EPStatement statement, final EPServiceProvider epServiceProvider) {
-                EventBean event = newEvents[0];
-                final Double newAvg = (Double) event.get("avg(value)");
-                LOG.info("avg=" + newAvg + " " + newAvg.getClass());
-                avg = newAvg;
+                for (final EventBean eb : newEvents) {
+                    final String sensorId = (String) eb.get("sensorId");
+                    minMap.put(sensorId, (Double) eb.get("min(value)"));
+                    maxMap.put(sensorId, (Double) eb.get("max(value)"));
+                    avgMap.put(sensorId, (Double) eb.get("avg(value)"));
+                }
             }
         });
     }

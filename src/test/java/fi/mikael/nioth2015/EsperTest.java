@@ -70,7 +70,8 @@ public class EsperTest {
             esperProvider.getEPRuntime().sendEvent(e2);
         }
 
-        Assert.assertEquals("average temperature should be 20", 20D, (double) avg1.get(), 0.000001D);
+        Assert.assertEquals("average temperature should be 20", 20D, avg1.get(), 0.000001D);
+        Assert.assertEquals("average temperature should be 30", 30D, avg2.get(), 0.000001D);
     }
 
 }
