@@ -24,11 +24,13 @@ public class EventProcessor {
 
     private EPServiceProvider esperProvider;
 
-    final ConcurrentMap<String, Double> minMap = new ConcurrentHashMap<>();
+    final ConcurrentMap<String, Double> min = new ConcurrentHashMap<>();
 
-    final ConcurrentMap<String, Double> maxMap = new ConcurrentHashMap<>();
+    final ConcurrentMap<String, Double> max = new ConcurrentHashMap<>();
 
-    final ConcurrentMap<String, Double> avgMap = new ConcurrentHashMap<>();
+    final ConcurrentMap<String, Double> avg = new ConcurrentHashMap<>();
+
+    final ConcurrentMap<String, Double> latest = new ConcurrentHashMap<>();
 
     @PostConstruct
     public void postConstruct() {
@@ -47,9 +49,9 @@ public class EventProcessor {
             public void update(final EventBean[] newEvents, final EventBean[] oldEvents, final EPStatement statement, final EPServiceProvider epServiceProvider) {
                 for (final EventBean eb : newEvents) {
                     final String sensorId = (String) eb.get("sensorId");
-                    minMap.put(sensorId, (Double) eb.get("min(value)"));
-                    maxMap.put(sensorId, (Double) eb.get("max(value)"));
-                    avgMap.put(sensorId, (Double) eb.get("avg(value)"));
+                    min.put(sensorId, (Double) eb.get("min(value)"));
+                    max.put(sensorId, (Double) eb.get("max(value)"));
+                    avg.put(sensorId, (Double) eb.get("avg(value)"));
                 }
             }
         });
@@ -66,6 +68,7 @@ public class EventProcessor {
     }
 
     public void submitEvent(final TemperatureEvent event) {
+        latest.put(event.getSensorId(), event.getValue());
         esperProvider.getEPRuntime().sendEvent(
                 new CurrentTimeEvent(event.getTimeCreated().toInstant().toEpochMilli()));
         esperProvider.getEPRuntime().sendEvent(event);

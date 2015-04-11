@@ -41,7 +41,10 @@ public class Application {
     @RequestMapping(value="/analysis/", method=RequestMethod.GET)
     public ResponseEntity<Map> showAnalysis() {
         return new ResponseEntity<>(
-                ImmutableMap.of("min", eventProcessor.minMap, "max", eventProcessor.maxMap, "avg", eventProcessor.avgMap),
+                ImmutableMap.of("min", eventProcessor.min,
+                        "max", eventProcessor.max,
+                        "avg", eventProcessor.avg,
+                        "latest", eventProcessor.latest),
                 HttpStatus.OK);
     }
 
