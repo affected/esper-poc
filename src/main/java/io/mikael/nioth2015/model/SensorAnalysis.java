@@ -8,11 +8,19 @@ public class SensorAnalysis {
 
     public double insideTemperature;
 
-    public int getInsideTemperatureComparison;
+    public double insideTemperatureMin;
+
+    public double insideTemperatureMax;
+
+    public double insideTemperatureAvg;
 
     public double radiatorTemperature;
 
-    public int getRadiatorTemperatureComparison;
+    public double radiatorTemperatureMin;
+
+    public double radiatorTemperatureMax;
+
+    public double radiatorTemperatureAvg;
 
     public int emoticon;
 

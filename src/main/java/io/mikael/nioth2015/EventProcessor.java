@@ -78,10 +78,14 @@ public class EventProcessor {
         final SensorAnalysis sa1 = new SensorAnalysis();
         sa1.id = "100";
         sa1.apartmentName = "A1";
-        sa1.insideTemperature = 20D;
-        sa1.getInsideTemperatureComparison = 1;
-        sa1.radiatorTemperature = 34D;
-        sa1.getRadiatorTemperatureComparison = 1;
+        sa1.insideTemperature = latest.get("100");
+        sa1.insideTemperatureMin = min.get("100");
+        sa1.insideTemperatureMax = max.get("100");
+        sa1.insideTemperatureAvg = avg.get("100");
+        sa1.radiatorTemperature = latest.get("101");
+        sa1.radiatorTemperatureMin = min.get("101");
+        sa1.radiatorTemperatureMax = max.get("101");
+        sa1.radiatorTemperatureAvg = avg.get("101");
         sa1.emoticon = 0;
         sa1.alert = "Open Window";
 
@@ -89,9 +93,13 @@ public class EventProcessor {
         sa2.id = "101";
         sa2.apartmentName = "A2";
         sa2.insideTemperature = 20D;
-        sa2.getInsideTemperatureComparison = 1;
+        sa2.insideTemperatureMin = 19D;
+        sa2.insideTemperatureMax = 24D;
+        sa2.insideTemperatureAvg = 20D;
         sa2.radiatorTemperature = 32D;
-        sa2.getRadiatorTemperatureComparison = 1;
+        sa2.radiatorTemperatureMin = 30D;
+        sa2.radiatorTemperatureMax = 35D;
+        sa2.radiatorTemperatureAvg = 32D;
         sa2.emoticon = 1;
         sa2.alert = "";
 
@@ -99,9 +107,13 @@ public class EventProcessor {
         sa3.id = "103";
         sa3.apartmentName = "A3";
         sa3.insideTemperature = 20D;
-        sa3.getInsideTemperatureComparison = 1;
+        sa3.insideTemperatureMin = 19D;
+        sa3.insideTemperatureMax = 24D;
+        sa3.insideTemperatureAvg = 20D;
         sa3.radiatorTemperature = 32D;
-        sa3.getRadiatorTemperatureComparison = 1;
+        sa3.radiatorTemperatureMin = 30D;
+        sa3.radiatorTemperatureMax = 35D;
+        sa3.radiatorTemperatureAvg = 32D;
         sa3.emoticon = 1;
         sa3.alert = "";
 
@@ -109,9 +121,13 @@ public class EventProcessor {
         sa4.id = "104";
         sa4.apartmentName = "A4";
         sa4.insideTemperature = 20D;
-        sa4.getInsideTemperatureComparison = 1;
+        sa4.insideTemperatureMin = 19D;
+        sa4.insideTemperatureMax = 24D;
+        sa4.insideTemperatureAvg = 20D;
         sa4.radiatorTemperature = 32D;
-        sa4.getRadiatorTemperatureComparison = 1;
+        sa4.radiatorTemperatureMin = 30D;
+        sa4.radiatorTemperatureMax = 35D;
+        sa4.radiatorTemperatureAvg = 32D;
         sa4.emoticon = 1;
         sa4.alert = "";
 
@@ -119,39 +135,55 @@ public class EventProcessor {
         sa5.id = "105";
         sa5.apartmentName = "A5";
         sa5.insideTemperature = 20D;
-        sa5.getInsideTemperatureComparison = 1;
+        sa5.insideTemperatureMin = 19D;
+        sa5.insideTemperatureMax = 24D;
+        sa5.insideTemperatureAvg = 20D;
         sa5.radiatorTemperature = 32D;
-        sa5.getRadiatorTemperatureComparison = 1;
+        sa5.radiatorTemperatureMin = 30D;
+        sa5.radiatorTemperatureMax = 35D;
+        sa5.radiatorTemperatureAvg = 32D;
         sa5.emoticon = 1;
         sa5.alert = "";
 
         final SensorAnalysis sa6 = new SensorAnalysis();
         sa6.id = "106";
         sa6.apartmentName = "A6";
-        sa6.insideTemperature = 22D;
-        sa6.getInsideTemperatureComparison = 1;
-        sa6.radiatorTemperature = 31D;
-        sa6.getRadiatorTemperatureComparison = 1;
+        sa6.insideTemperature = 20D;
+        sa6.insideTemperatureMin = 19D;
+        sa6.insideTemperatureMax = 24D;
+        sa6.insideTemperatureAvg = 20D;
+        sa6.radiatorTemperature = 32D;
+        sa6.radiatorTemperatureMin = 30D;
+        sa6.radiatorTemperatureMax = 35D;
+        sa6.radiatorTemperatureAvg = 32D;
         sa6.emoticon = 1;
         sa6.alert = "";
 
         final SensorAnalysis sa7 = new SensorAnalysis();
         sa7.id = "107";
         sa7.apartmentName = "A7";
-        sa7.insideTemperature = 21D;
-        sa7.getInsideTemperatureComparison = 1;
-        sa7.radiatorTemperature = 33D;
-        sa7.getRadiatorTemperatureComparison = 1;
+        sa7.insideTemperature = 20D;
+        sa7.insideTemperatureMin = 19D;
+        sa7.insideTemperatureMax = 24D;
+        sa7.insideTemperatureAvg = 20D;
+        sa7.radiatorTemperature = 32D;
+        sa7.radiatorTemperatureMin = 30D;
+        sa7.radiatorTemperatureMax = 35D;
+        sa7.radiatorTemperatureAvg = 32D;
         sa7.emoticon = 1;
         sa7.alert = "";
 
         final SensorAnalysis sa8 = new SensorAnalysis();
         sa8.id = "108";
         sa8.apartmentName = "A8";
-        sa8.insideTemperature = 19D;
-        sa8.getInsideTemperatureComparison = 1;
-        sa8.radiatorTemperature = 34D;
-        sa8.getRadiatorTemperatureComparison = 1;
+        sa8.insideTemperature = 20D;
+        sa8.insideTemperatureMin = 19D;
+        sa8.insideTemperatureMax = 24D;
+        sa8.insideTemperatureAvg = 20D;
+        sa8.radiatorTemperature = 32D;
+        sa8.radiatorTemperatureMin = 30D;
+        sa8.radiatorTemperatureMax = 35D;
+        sa8.radiatorTemperatureAvg = 32D;
         sa8.emoticon = 1;
         sa8.alert = "";
 

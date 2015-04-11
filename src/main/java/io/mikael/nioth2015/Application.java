@@ -27,11 +27,6 @@ public class Application {
     @Autowired
     private EventStreamConnection connection;
 
-    @RequestMapping(value="/events/{id}", method=RequestMethod.GET)
-    public ResponseEntity<TemperatureEvent> readEvent(final @PathVariable String id) {
-        return new ResponseEntity<>((TemperatureEvent)null, HttpStatus.OK);
-    }
-
     @RequestMapping(value="/events/", method=RequestMethod.POST)
     public ResponseEntity<TemperatureEvent> createEvent(final @RequestBody TemperatureEvent event) {
         eventProcessor.submitEvent(event);
@@ -40,8 +35,8 @@ public class Application {
 
     @RequestMapping(value="/analysis/", method=RequestMethod.GET)
     public ResponseEntity<Map> showAnalysis() {
-        return new ResponseEntity<>(
-                ImmutableMap.of("min", eventProcessor.min,
+        return new ResponseEntity<>(ImmutableMap.of(
+                        "min", eventProcessor.min,
                         "max", eventProcessor.max,
                         "avg", eventProcessor.avg,
                         "latest", eventProcessor.latest),
