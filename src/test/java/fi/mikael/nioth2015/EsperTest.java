@@ -25,34 +25,52 @@ public class EsperTest {
     public void testEvents() throws Exception {
         LOG.error("starting");
 
-        final AtomicReference<Double> avg = new AtomicReference<>(0D);
+        final AtomicReference<Double> avg1 = new AtomicReference<>(0D);
+        final AtomicReference<Double> avg2 = new AtomicReference<>(0D);
 
         final Configuration config = new Configuration();
         config.getEngineDefaults().getThreading().setInternalTimerEnabled(false);
         config.addEventType(TemperatureEvent.class);
         final EPServiceProvider esperProvider = EPServiceProviderManager.getDefaultProvider(config);
 
-        final String expression = "select avg(value) from io.mikael.nioth2015.model.TemperatureEvent.win:time(30 sec)";
+        final String expression = "select avg(value), sensorId " +
+                " from io.mikael.nioth2015.model.TemperatureEvent.win:time(30 sec) " +
+                " GROUP BY sensorId ";
         final EPStatement statement = esperProvider.getEPAdministrator().createEPL(expression);
 
         statement.addListener(new StatementAwareUpdateListener() {
             @Override
             public void update(final EventBean[] newEvents, final EventBean[] oldEvents, final EPStatement statement1, final EPServiceProvider epServiceProvider) {
-                final EventBean event = newEvents[0];
-                avg.set((Double) event.get("avg(value)"));
+                System.err.println(Arrays.toString(newEvents));
+                for (final EventBean eb : newEvents) {
+                    final String sensorId = (String) eb.get("sensorId");
+                    final Double avg = (Double) eb.get("avg(value)");
+                    System.err.println(avg + " " + sensorId);
+                    if ("1".equals(sensorId)) {
+                        avg1.set(avg);
+                    } else {
+                        avg2.set(avg);
+                    }
+                }
             }
         });
 
         for (int i = 0; i < TEMPS.length; i++) {
-            final TemperatureEvent event = new TemperatureEvent();
-            event.setTimeCreated(now.plusSeconds(i * 10));
-            event.setValue(TEMPS[i]);
+            final TemperatureEvent e1 = new TemperatureEvent();
+            e1.setSensorId("1");
+            e1.setTimeCreated(now.plusSeconds(i * 10));
+            e1.setValue(TEMPS[i]);
+            final TemperatureEvent e2 = new TemperatureEvent();
+            e2.setSensorId("2");
+            e2.setTimeCreated(now.plusSeconds(i * 10));
+            e2.setValue(TEMPS[i] + 10);
             esperProvider.getEPRuntime().sendEvent(
-                    new CurrentTimeEvent(event.getTimeCreated().toInstant().toEpochMilli()));
-            esperProvider.getEPRuntime().sendEvent(event);
+                    new CurrentTimeEvent(e1.getTimeCreated().toInstant().toEpochMilli()));
+            esperProvider.getEPRuntime().sendEvent(e1);
+            esperProvider.getEPRuntime().sendEvent(e2);
         }
 
-        Assert.assertEquals("average temperature should be 20", 20D, (double) avg.get(), 0.000001D);
+        Assert.assertEquals("average temperature should be 20", 20D, (double) avg1.get(), 0.000001D);
     }
 
 }
