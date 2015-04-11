@@ -5,13 +5,15 @@ server:
   port: 8080
   sessionTimeout: 0
 
+xenqtt.connection.username: username
+xenqtt.connection.password: password
 xenqtt.connection.url: "tcp://mqtt.dev.mikael.io"
 xenqtt.connection.port: 1883
 xenqtt.connection.clientId: 1883
 xenqtt.connection.cleanSession: false
 
-xenqtt.subscriptions.list: test,rest
-xenqtt.subscriptions.QoS: 0,1
+xenqtt.subscriptions.list: test
+xenqtt.subscriptions.QoS: 2
 
 ---
 spring.profiles: test

@@ -57,13 +57,15 @@ public class EventStreamConnection implements CommandLineRunner {
 
     @Override
     public void run(String... arg0) throws Exception {
+
+        LOG.info("connecting to " + url);
+
         // Build your client. This client is an asynchronous one so all interaction with the broker will be non-blocking.
         AsyncMqttClient client = new AsyncMqttClient(url + ":" + port, new Subscriber(connectLatch, connectReturnCode, processor), 5);
         try {
             // Connect to the broker with a specific client ID. Only if the broker accepted the connection shall we proceed.
             LOG.info("clientId: " + clientId);
             LOG.info("cleanSession: " + cleanSession);
-
 
             client.connect(clientId, cleanSession, username, password);
 
@@ -77,7 +79,8 @@ public class EventStreamConnection implements CommandLineRunner {
             LOG.info("connected");
 
             //set up subscriptions
-            List<Subscription> subscriptions = getSubscriptions();
+            final List<Subscription> subscriptions = getSubscriptions();
+            LOG.info("subscriptions: " + subscriptions);
             if (subscriptions.size() > 0) {
                 client.subscribe(subscriptions);
             }
@@ -88,16 +91,15 @@ public class EventStreamConnection implements CommandLineRunner {
     }
 
     private List<Subscription> getSubscriptions() {
-        List<Subscription> subscriptionsToCreate = new ArrayList<>();
-        String[] subscriptionArray = subscriptions.split(",");
-        String[] qosArray = qos.split(",");
-        int[] qos = new int[qosArray.length];
+        final List<Subscription> subscriptionsToCreate = new ArrayList<>();
+        final String[] subscriptionArray = subscriptions.split(",");
+        final String[] qosArray = qos.split(",");
+        final int[] qos = new int[qosArray.length];
         for (int i = 0; i < qosArray.length; i++) {
             try {
                 qos[i] = Integer.parseInt(qosArray[i]);
             } catch (NumberFormatException ignored) {}
         }
-
         if (subscriptionArray.length != qos.length) {
             LOG.error("could not create subscriptions, qos array length: " + qos.length + " != topic array length: " + subscriptionArray.length);
         } else {
@@ -106,7 +108,6 @@ public class EventStreamConnection implements CommandLineRunner {
                 subscriptionsToCreate.add(new Subscription(subscriptionArray[i], QoS.lookup(qos[i])));
             }
         }
-
         return subscriptionsToCreate;
     }
 
@@ -137,8 +138,12 @@ public class EventStreamConnection implements CommandLineRunner {
 
         @Override
         public void publishReceived(MqttClient client, PublishMessage message) {
-            processor.submitMessage(message.getPayloadString());
             LOG.info("received");
+            try {
+                processor.submitMessage(message.getPayloadString());
+            } catch (final Exception e) {
+                LOG.error("failed to submit message", e);
+            }
         }
 
         @Override

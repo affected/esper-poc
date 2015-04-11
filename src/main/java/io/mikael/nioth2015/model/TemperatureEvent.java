@@ -4,23 +4,26 @@ import java.time.ZonedDateTime;
 
 public class TemperatureEvent {
 
-    public final String unitOfMeasure;
+    public String unitOfMeasure;
 
-    public final String partitionId;
+    public String partitionId;
 
-    public final String measurementType;
+    public String measurementType;
 
-    public final ZonedDateTime timeCreated;
+    public ZonedDateTime timeCreated;
 
-    public final String organization;
+    public String organization;
 
-    public final String guid;
+    public String guid;
 
-    public final double value;
+    public double value;
 
-    public final String sensorId;
+    public String sensorId;
 
-    public final String modCamId;
+    public String modCamId;
+
+    public TemperatureEvent() {
+    }
 
     public TemperatureEvent(final String unitOfMeasure, final String partitionId, final String measurementType, final ZonedDateTime timeCreated, final String organization, final String guid, final double value, final String sensorId, final String modCamId) {
         this.unitOfMeasure = unitOfMeasure;

@@ -5,6 +5,7 @@ import com.espertech.esper.client.EPServiceProvider;
 import com.espertech.esper.client.EPServiceProviderManager;
 import com.espertech.esper.client.time.CurrentTimeEvent;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JSR310Module;
 import io.mikael.nioth2015.model.TemperatureEvent;
 import org.springframework.stereotype.Component;
 
@@ -24,8 +25,10 @@ public class EventProcessor {
     }
 
     public void submitMessage(final String jsonPayload) {
+        final ObjectMapper mapper = new ObjectMapper();
+        mapper.registerModule(new JSR310Module());
         try {
-            submitEvent(new ObjectMapper().readValue(jsonPayload, TemperatureEvent.class));
+            submitEvent(mapper.readValue(jsonPayload, TemperatureEvent.class));
         } catch (final IOException e) {
             throw new RuntimeException("temperature event json deserialization failed", e);
         }
