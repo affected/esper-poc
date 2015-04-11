@@ -44,27 +44,7 @@ public class Application {
 
     @RequestMapping(value="/lists/", method=RequestMethod.GET)
     public ResponseEntity<List<SensorAnalysis>> showLists() {
-        final SensorAnalysis sa1 = new SensorAnalysis();
-        sa1.id = "100";
-        sa1.apartmentName = "A1";
-        sa1.insideTemperature = 20D;
-        sa1.getInsideTemperatureComparison = 1;
-        sa1.radiatorTemperature = 34D;
-        sa1.getRadiatorTemperatureComparison = 1;
-        sa1.emoticon = 0;
-        sa1.alert = "Open Window";
-
-        final SensorAnalysis sa2 = new SensorAnalysis();
-        sa2.id = "101";
-        sa2.apartmentName = "A2";
-        sa2.insideTemperature = 20D;
-        sa2.getInsideTemperatureComparison = 1;
-        sa2.radiatorTemperature = 32D;
-        sa2.getRadiatorTemperatureComparison = 1;
-        sa2.emoticon = 1;
-        sa2.alert = "";
-
-        return new ResponseEntity<>(ImmutableList.of(sa1, sa2), HttpStatus.OK);
+        return new ResponseEntity<>(eventProcessor.readLists(), HttpStatus.OK);
     }
 
     @Bean
