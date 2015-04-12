@@ -79,18 +79,14 @@ public class EventProcessor {
         final SensorAnalysis sa1 = new SensorAnalysis();
         sa1.id = "100";
         sa1.apartmentName = "A1";
-        try {
-            sa1.insideTemperature = latest.get("100");
-            sa1.insideTemperatureMin = min.get("100");
-            sa1.insideTemperatureMax = max.get("100");
-            sa1.insideTemperatureAvg = avg.get("100");
-            sa1.radiatorTemperature = latest.get("101");
-            sa1.radiatorTemperatureMin = min.get("101");
-            sa1.radiatorTemperatureMax = max.get("101");
-            sa1.radiatorTemperatureAvg = avg.get("101");
-        } catch (final NullPointerException ignore) {
-            // ignore
-        }
+        sa1.insideTemperature = latest.getOrDefault("100", 0D);
+        sa1.insideTemperatureMin = min.getOrDefault("100", 0D);
+        sa1.insideTemperatureMax = max.getOrDefault("100", 0D);
+        sa1.insideTemperatureAvg = avg.getOrDefault("100", 0D);
+        sa1.radiatorTemperature = latest.getOrDefault("101", 0D);
+        sa1.radiatorTemperatureMin = min.getOrDefault("101", 0D);
+        sa1.radiatorTemperatureMax = max.getOrDefault("101", 0D);
+        sa1.radiatorTemperatureAvg = avg.getOrDefault("101", 0D);
         sa1.emoticon = 0;
         sa1.alert = "Open Window";
 

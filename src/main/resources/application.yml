@@ -25,8 +25,8 @@ xenqtt.connection.port: 1883
 xenqtt.connection.clientId: "d:nfnzth:analytics:ubuntu"
 xenqtt.connection.cleanSession: false
 
-xenqtt.subscriptions.list: "iot-2/evt/temperature/fmt/json"
-xenqtt.subscriptions.QoS: 2
+xenqtt.subscriptions.list: "iot-2/cmd/analytics/fmt/json"
+xenqtt.subscriptions.QoS: 0
 
 ---
 spring.profiles: test
