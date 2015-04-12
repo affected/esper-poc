@@ -39,7 +39,7 @@ xenqtt.connection.clientId: "analysis"
 xenqtt.connection.cleanSession: false
 
 xenqtt.subscriptions.list: "tempevents"
-xenqtt.subscriptions.QoS: 2
+xenqtt.subscriptions.QoS: 0
 
 ---
 spring.profiles: test

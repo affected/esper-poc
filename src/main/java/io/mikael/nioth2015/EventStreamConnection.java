@@ -143,7 +143,7 @@ public class EventStreamConnection implements CommandLineRunner {
             try {
                 processor.submitMessage(message.getPayloadString());
                 final String averages = new ObjectMapper().writeValueAsString(processor.avg);
-                client.publish(new PublishMessage("averages", QoS.EXACTLY_ONCE, averages));
+                client.publish(new PublishMessage("averages", QoS.AT_LEAST_ONCE, averages));
             } catch (final Exception e) {
                 LOG.error("failed to submit message", e);
             }
