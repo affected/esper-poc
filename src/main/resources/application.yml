@@ -31,8 +31,8 @@ xenqtt.subscriptions.QoS: 0
 ---
 spring.profiles: local
 
-xenqtt.connection.username: "use-token-auth"
-xenqtt.connection.password: "7x2sg-Jiqsb@joU0L0"
+xenqtt.connection.username: "analysis"
+xenqtt.connection.password: "analysiss"
 xenqtt.connection.url: "tcp://localhost"
 xenqtt.connection.port: 1883
 xenqtt.connection.clientId: "analysis"

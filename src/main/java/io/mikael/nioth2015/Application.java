@@ -48,6 +48,20 @@ public class Application {
         return new ResponseEntity<>(eventProcessor.readLists(), HttpStatus.OK);
     }
 
+
+    @RequestMapping(value="/alerts/{id}", method=RequestMethod.POST)
+    public ResponseEntity<String> setStatus(final @PathVariable("id") String id, final @RequestBody String alert) {
+        eventProcessor.alerts.put(id, alert);
+        return new ResponseEntity<>("OK", HttpStatus.OK);
+    }
+
+    @RequestMapping(value="/emoticons/{id}", method=RequestMethod.POST)
+    public ResponseEntity<String> setEmoticon(final @PathVariable("id") String id, final @RequestBody String emoticon) {
+        eventProcessor.emoticons.put(id, Integer.parseInt(emoticon));
+         return new ResponseEntity<>("OK", HttpStatus.OK);
+    }
+
+
     @Bean
     public Filter corsFilter() {
         return new Filter() {

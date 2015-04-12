@@ -32,6 +32,10 @@ public class EventProcessor {
 
     final ConcurrentMap<String, Double> latest = new ConcurrentHashMap<>();
 
+    final ConcurrentMap<String, String> alerts = new ConcurrentHashMap<>();
+
+    final ConcurrentMap<String, Integer> emoticons = new ConcurrentHashMap<>();
+
     @PostConstruct
     public void postConstruct() {
         final Configuration config = new Configuration();
@@ -89,8 +93,8 @@ public class EventProcessor {
         sa1.radiatorTemperatureMin = min.getOrDefault("101", 0D);
         sa1.radiatorTemperatureMax = max.getOrDefault("101", 0D);
         sa1.radiatorTemperatureAvg = avg.getOrDefault("101", 0D);
-        sa1.emoticon = 0;
-        sa1.alert = "Open Window";
+        sa1.emoticon = emoticons.getOrDefault("A1", 0);
+        sa1.alert = alerts.getOrDefault("A1", "");
 
         final SensorAnalysis sa2 = new SensorAnalysis();
         sa2.id = "101";
