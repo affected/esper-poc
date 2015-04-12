@@ -57,11 +57,13 @@ public class EventProcessor {
         });
     }
 
-    public void submitMessage(final String jsonPayload) {
+    public TemperatureEvent submitMessage(final String jsonPayload) {
         final ObjectMapper mapper = new ObjectMapper();
         mapper.registerModule(new JSR310Module());
         try {
-            submitEvent(mapper.readValue(jsonPayload, TemperatureEvent.class));
+            final TemperatureEvent ret = mapper.readValue(jsonPayload, TemperatureEvent.class);
+            submitEvent(ret);
+            return ret;
         } catch (final IOException e) {
             throw new RuntimeException("temperature event json deserialization failed", e);
         }

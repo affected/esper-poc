@@ -1,16 +1,19 @@
 package io.mikael.nioth2015;
 
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.atomic.AtomicReference;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import net.sf.xenqtt.client.AsyncClientListener;
 import net.sf.xenqtt.client.AsyncMqttClient;
 import net.sf.xenqtt.client.MqttClient;
 import net.sf.xenqtt.client.PublishMessage;
 import net.sf.xenqtt.client.Subscription;
 import net.sf.xenqtt.message.ConnectReturnCode;
+import net.sf.xenqtt.message.MqttMessage;
 import net.sf.xenqtt.message.QoS;
 
 import org.slf4j.Logger;
@@ -139,6 +142,8 @@ public class EventStreamConnection implements CommandLineRunner {
             LOG.info("received");
             try {
                 processor.submitMessage(message.getPayloadString());
+                final String averages = new ObjectMapper().writeValueAsString(processor.avg);
+                client.publish(new PublishMessage("averages", QoS.EXACTLY_ONCE, averages));
             } catch (final Exception e) {
                 LOG.error("failed to submit message", e);
             }
