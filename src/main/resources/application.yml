@@ -29,6 +29,19 @@ xenqtt.subscriptions.list: "iot-2/cmd/analytics/fmt/json"
 xenqtt.subscriptions.QoS: 0
 
 ---
+spring.profiles: local
+
+xenqtt.connection.username: "use-token-auth"
+xenqtt.connection.password: "7x2sg-Jiqsb@joU0L0"
+xenqtt.connection.url: "tcp://localhost"
+xenqtt.connection.port: 1883
+xenqtt.connection.clientId: "analysis"
+xenqtt.connection.cleanSession: false
+
+xenqtt.subscriptions.list: "tempevents"
+xenqtt.subscriptions.QoS: 2
+
+---
 spring.profiles: test
 
 server:
