@@ -5,8 +5,6 @@ import com.espertech.esper.client.time.CurrentTimeEvent;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JSR310Module;
 import com.google.common.collect.ImmutableList;
-import io.mikael.nioth2015.model.SensorAnalysis;
-import io.mikael.nioth2015.model.TemperatureEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -44,19 +42,17 @@ public class EventProcessor {
         esperProvider = EPServiceProviderManager.getDefaultProvider(config);
 
         final String expression = "select min(value), max(value), avg(value), sensorId " +
-                " from io.mikael.nioth2015.model.TemperatureEvent.win:time(30 sec) " +
+                " from io.mikael.nioth2015.TemperatureEvent.win:time(30 sec) " +
                 " GROUP BY sensorId ";
 
         final EPStatement statement = esperProvider.getEPAdministrator().createEPL(expression);
-        statement.addListener(new StatementAwareUpdateListener() {
-            @Override
-            public void update(final EventBean[] newEvents, final EventBean[] oldEvents, final EPStatement statement, final EPServiceProvider epServiceProvider) {
-                for (final EventBean eb : newEvents) {
-                    final String sensorId = (String) eb.get("sensorId");
-                    min.put(sensorId, (Double) eb.get("min(value)"));
-                    max.put(sensorId, (Double) eb.get("max(value)"));
-                    avg.put(sensorId, (Double) eb.get("avg(value)"));
-                }
+
+        statement.addListener((news, olds, st, ep) -> {
+            for (final EventBean eb : news) {
+                final String sensorId = (String) eb.get("sensorId");
+                min.put(sensorId, (Double) eb.get("min(value)"));
+                max.put(sensorId, (Double) eb.get("max(value)"));
+                avg.put(sensorId, (Double) eb.get("avg(value)"));
             }
         });
     }

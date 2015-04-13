@@ -1,8 +1,6 @@
 package io.mikael.nioth2015;
 
 import com.google.common.collect.ImmutableMap;
-import io.mikael.nioth2015.model.SensorAnalysis;
-import io.mikael.nioth2015.model.TemperatureEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -48,7 +46,6 @@ public class Application {
         return new ResponseEntity<>(eventProcessor.readLists(), HttpStatus.OK);
     }
 
-
     @RequestMapping(value="/alerts/{id}", method=RequestMethod.POST)
     public ResponseEntity<String> setStatus(final @PathVariable("id") String id, final @RequestBody String alert) {
         eventProcessor.alerts.put(id, alert);
@@ -58,9 +55,8 @@ public class Application {
     @RequestMapping(value="/emoticons/{id}", method=RequestMethod.POST)
     public ResponseEntity<String> setEmoticon(final @PathVariable("id") String id, final @RequestBody String emoticon) {
         eventProcessor.emoticons.put(id, Integer.parseInt(emoticon));
-         return new ResponseEntity<>("OK", HttpStatus.OK);
+        return new ResponseEntity<>("OK", HttpStatus.OK);
     }
-
 
     @Bean
     public Filter corsFilter() {

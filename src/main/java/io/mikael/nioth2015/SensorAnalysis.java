@@ -1,4 +1,4 @@
-package io.mikael.nioth2015.model;
+package io.mikael.nioth2015;
 
 public class SensorAnalysis {
 

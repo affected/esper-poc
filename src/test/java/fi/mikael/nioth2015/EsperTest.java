@@ -2,7 +2,7 @@ package fi.mikael.nioth2015;
 
 import com.espertech.esper.client.*;
 import com.espertech.esper.client.time.CurrentTimeEvent;
-import io.mikael.nioth2015.model.TemperatureEvent;
+import io.mikael.nioth2015.TemperatureEvent;
 import org.junit.Assert;
 import org.junit.Test;
 import org.slf4j.Logger;
@@ -10,7 +10,6 @@ import org.slf4j.LoggerFactory;
 
 import java.time.ZonedDateTime;
 import java.util.Arrays;
-import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class EsperTest {
@@ -34,23 +33,21 @@ public class EsperTest {
         final EPServiceProvider esperProvider = EPServiceProviderManager.getDefaultProvider(config);
 
         final String expression = "select avg(value), sensorId " +
-                " from io.mikael.nioth2015.model.TemperatureEvent.win:time(30 sec) " +
+                " from io.mikael.nioth2015.TemperatureEvent.win:time(30 sec) " +
                 " GROUP BY sensorId ";
+
         final EPStatement statement = esperProvider.getEPAdministrator().createEPL(expression);
 
-        statement.addListener(new StatementAwareUpdateListener() {
-            @Override
-            public void update(final EventBean[] newEvents, final EventBean[] oldEvents, final EPStatement statement1, final EPServiceProvider epServiceProvider) {
-                System.err.println(Arrays.toString(newEvents));
-                for (final EventBean eb : newEvents) {
-                    final String sensorId = (String) eb.get("sensorId");
-                    final Double avg = (Double) eb.get("avg(value)");
-                    System.err.println(avg + " " + sensorId);
-                    if ("1".equals(sensorId)) {
-                        avg1.set(avg);
-                    } else {
-                        avg2.set(avg);
-                    }
+        statement.addListener((news, olds, st, ep) -> {
+            LOG.debug(Arrays.toString(news));
+            for (final EventBean eb : news) {
+                final String sensorId = (String) eb.get("sensorId");
+                final Double avg = (Double) eb.get("avg(value)");
+                LOG.debug(avg + " " + sensorId);
+                if ("1".equals(sensorId)) {
+                    avg1.set(avg);
+                } else {
+                    avg2.set(avg);
                 }
             }
         });
