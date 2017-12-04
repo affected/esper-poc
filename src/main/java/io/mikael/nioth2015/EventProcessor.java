@@ -3,7 +3,6 @@ package io.mikael.nioth2015;
 import com.espertech.esper.client.*;
 import com.espertech.esper.client.time.CurrentTimeEvent;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jsr310.JSR310Module;
 import com.google.common.collect.ImmutableList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -59,7 +58,6 @@ public class EventProcessor {
 
     public TemperatureEvent submitMessage(final String jsonPayload) {
         final ObjectMapper mapper = new ObjectMapper();
-        mapper.registerModule(new JSR310Module());
         try {
             final TemperatureEvent ret = mapper.readValue(jsonPayload, TemperatureEvent.class);
             submitEvent(ret);
