@@ -21,7 +21,7 @@ public class EsperTest {
     private static final ZonedDateTime now = ZonedDateTime.now().minusSeconds(30);
 
     @Test
-    public void testEvents() throws Exception {
+    public void testEvents() {
         LOG.error("starting");
 
         final AtomicReference<Double> avg1 = new AtomicReference<>(0D);

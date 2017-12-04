@@ -1,21 +1,9 @@
 package io.mikael.nioth2015;
 
-import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.atomic.AtomicReference;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
-import net.sf.xenqtt.client.AsyncClientListener;
-import net.sf.xenqtt.client.AsyncMqttClient;
-import net.sf.xenqtt.client.MqttClient;
-import net.sf.xenqtt.client.PublishMessage;
-import net.sf.xenqtt.client.Subscription;
+import net.sf.xenqtt.client.*;
 import net.sf.xenqtt.message.ConnectReturnCode;
-import net.sf.xenqtt.message.MqttMessage;
 import net.sf.xenqtt.message.QoS;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,13 +11,19 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.atomic.AtomicReference;
+
 @Component
 public class EventStreamConnection implements CommandLineRunner {
 
     private static final Logger LOG = LoggerFactory.getLogger(EventStreamConnection.class);
 
-    final AtomicReference<ConnectReturnCode> connectReturnCode = new AtomicReference<>();
-    final CountDownLatch connectLatch = new CountDownLatch(1);
+    private final AtomicReference<ConnectReturnCode> connectReturnCode = new AtomicReference<>();
+
+    private final CountDownLatch connectLatch = new CountDownLatch(1);
 
     @Value("${xenqtt.connection.url}")
     private String url;
@@ -118,27 +112,28 @@ public class EventStreamConnection implements CommandLineRunner {
         private AtomicReference<ConnectReturnCode> connectReturnCode;
         private EventProcessor processor;
 
-        public Subscriber(CountDownLatch latch, AtomicReference<ConnectReturnCode> connectReturnCode, final EventProcessor processor) {
+        public Subscriber(final CountDownLatch latch, final AtomicReference<ConnectReturnCode> connectReturnCode,
+                          final EventProcessor processor)
+        {
             this.latch = latch;
             this.connectReturnCode = connectReturnCode;
             this.processor = processor;
         }
 
         @Override
-        public void disconnected(MqttClient client, Throwable cause, boolean reconnecting) {
+        public void disconnected(final MqttClient client, final Throwable cause, final boolean reconnecting) {
             if (cause != null) {
                 LOG.error("Disconnected from the broker due to an exception.", cause);
             } else {
                 LOG.info("Disconnecting from the broker.");
             }
-
             if (reconnecting) {
                 LOG.info("Attempting to reconnect to the broker.");
             }
         }
 
         @Override
-        public void publishReceived(MqttClient client, PublishMessage message) {
+        public void publishReceived(final MqttClient client, final PublishMessage message) {
             LOG.info("received");
             try {
                 processor.submitMessage(message.getPayloadString());
@@ -150,25 +145,26 @@ public class EventStreamConnection implements CommandLineRunner {
         }
 
         @Override
-        public void connected(MqttClient client, ConnectReturnCode returnCode) {
+        public void connected(final MqttClient client, final ConnectReturnCode returnCode) {
             LOG.info("connected");
             connectReturnCode.set(returnCode);
             latch.countDown();
         }
 
         @Override
-        public void published(MqttClient client, PublishMessage message) {
+        public void published(final MqttClient client, final PublishMessage message) {
             LOG.info("published");
         }
 
         @Override
-        public void subscribed(MqttClient client, Subscription[] requestedSubscriptions, Subscription[] grantedSubscriptions, boolean requestsGranted) {
+        public void subscribed(final MqttClient client, final Subscription[] requestedSubscriptions,
+                               final Subscription[] grantedSubscriptions, final boolean requestsGranted)
+        {
             LOG.info("subscribed");
-
         }
 
         @Override
-        public void unsubscribed(MqttClient client, String[] topics) {
+        public void unsubscribed(final MqttClient client, final String[] topics) {
             LOG.info("unsubscribed");
         }
 
